@@ -25,12 +25,12 @@ var a = new CanvasAnimate(root,{length:80,clicked:true,moveon:true})
 CanvasAnimate.js
 
 > 说明，配置参数
-`length`  生成的小点点数量
-`RoundColor` 小点点颜色
-`LineColor` 线条颜色
-`LineWeight` 线条宽度
-`clicked` 鼠标点击是否增加连接小点点
-`moveon` 鼠标移动是否增加连接效果
+- `length`  生成的小点点数量
+- `RoundColor` 小点点颜色
+- `LineColor` 线条颜色
+- `LineWeight` 线条宽度
+- `clicked` 鼠标点击是否增加连接小点点
+- `moveon` 鼠标移动是否增加连接效果
 
 ```
 function CanvasAnimate(Dom,options){
