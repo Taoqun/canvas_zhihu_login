@@ -1,7 +1,11 @@
 function CanvasAnimate(Dom,options){
     options = options || {}
     this.Element = Dom
-    this.Dom = Dom.getContext("2d")
+    this.cvs = Dom.getContext("2d")
+    this.off_cvs = document.createElement("canvas")
+    this.off_cvs.width = Dom.width
+    this.off_cvs.height = Dom.height
+    this.Dom = this.off_cvs.getContext("2d")
     this.width = Dom.width
     this.height = Dom.height
     this.length = options.length || 100
@@ -45,7 +49,6 @@ CanvasAnimate.prototype.Draw = function(list){
         new_arr.push( obj )
     });
     
-    
     new_arr.map((item1,index1)=>{
         new_arr.map((item2,index2)=>{
             if(item1 !== item2){
@@ -64,17 +67,18 @@ CanvasAnimate.prototype.Draw = function(list){
         })
     })
 
-
-
     this.drawLine(line_arr)
-
     
     new_arr.map((item)=>{
         this.drawRound(item)
     })
 
     this.list = new_arr
+
+    this.cvs.drawImage(this.off_cvs,0,0,this.width,this.height)
+    
     setTimeout(()=>{
+        this.cvs.clearRect( 0,0,this.width,this.height )
         this.Dom.clearRect( 0,0,this.width,this.height )
         this.Draw( new_arr )
     },50)
@@ -82,7 +86,6 @@ CanvasAnimate.prototype.Draw = function(list){
 CanvasAnimate.prototype.drawRound = function(obj){
     let {x,y,r} = obj
     this.Dom.beginPath()
-    let m = parseInt( Math.random() * 10)
     this.Dom.arc( x,y,r, 0, 2*Math.PI )
     this.Dom.fillStyle = this.RoundColor
     this.Dom.fill()
@@ -155,3 +158,4 @@ CanvasAnimate.prototype.moveXY = function(event){
         this.list.unshift(obj)
     }
 }
+
