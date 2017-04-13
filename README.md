@@ -5,11 +5,11 @@
 先上效果：
 
 ![GIF.gif](http://upload-images.jianshu.io/upload_images/768057-b896a32b89842f33.gif?imageMogr2/auto-orient/strip)
-[图片不显示，点击这里](http://upload-images.jianshu.io/upload_images/768057-b896a32b89842f33.gif?imageMogr2/auto-orient/strip)
+
 点击效果：
 
 ![GIF2.gif](http://upload-images.jianshu.io/upload_images/768057-92c912b5093d6bdf.gif?imageMogr2/auto-orient/strip)
-[图片不显示，点击这里](http://upload-images.jianshu.io/upload_images/768057-92c912b5093d6bdf.gif?imageMogr2/auto-orient/strip)
+
 > - 默认生成随机大小的100个小点点
 > - 鼠标移动，修改鼠标小点点的xy轴坐标
 > - 鼠标点击，增加随机大小小点点
@@ -26,19 +26,19 @@ index.js
 ```
 var root = document.querySelector("#root")
 var a = new CanvasAnimate(root,{length:80,clicked:true,moveon:true})
-    a.Run()
+    a.Run() // 开始运行
     a.pause() //  暂停
 ```
 
 CanvasAnimate.js
 
 > 说明，配置参数
-- `length`  生成的小点点数量
-- `RoundColor` 小点点颜色
-- `LineColor` 线条颜色
-- `LineWeight` 线条宽度
-- `clicked` 鼠标点击是否增加连接小点点
-- `moveon` 鼠标移动是否增加连接效果
+- `length`  `Number`   生成的小点点数量
+- `RoundColor`  `String` 小点点颜色
+- `LineColor` `String` 线条颜色
+- `LineWeight` `Number` 线条宽度
+- `clicked` `Boolean` 鼠标点击是否增加连接小点点
+- `moveon` `Boolean` 鼠标移动是否增加连接效果
 
 -----
 
