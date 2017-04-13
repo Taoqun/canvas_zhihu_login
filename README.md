@@ -4,11 +4,11 @@
 
 先上效果：
 
-![GIF.gif](http://upload-images.jianshu.io/upload_images/768057-b896a32b89842f33.gif?imageMogr2/auto-orient/strip)
+![GIF.gif](http://ocrcrbkp1.bkt.clouddn.com/GIF.gif)
 
 点击效果：
 
-![GIF2.gif](http://upload-images.jianshu.io/upload_images/768057-92c912b5093d6bdf.gif?imageMogr2/auto-orient/strip)
+![GIF2.gif](http://ocrcrbkp1.bkt.clouddn.com/GIF2.gif)
 
 > - 默认生成随机大小的100个小点点
 > - 鼠标移动，修改鼠标小点点的xy轴坐标
