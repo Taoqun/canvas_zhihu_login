@@ -23,6 +23,7 @@ CanvasAnimate.prototype.Run = function(){
     }
     if( this.moveon ){
         this.Element.addEventListener( "mousemove",this.moveXY.bind(this) )
+        this.Element.addEventListener( "mouseout",this.moveoutXY.bind(this) )
     }
     this.Draw( this.getLength() )
 }
@@ -157,5 +158,8 @@ CanvasAnimate.prototype.moveXY = function(event){
     }else{
         this.list.unshift(obj)
     }
+}
+CanvasAnimate.prototype.moveoutXY = function(){
+    this.list.shift()
 }
 
