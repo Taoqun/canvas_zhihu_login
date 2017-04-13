@@ -1,14 +1,21 @@
-> canvas 封装方法，增加点击，移动效果，配置颜色线条粗细功能
-> 在线查看 http://jsrun.net/3PkKp/edit
-> 传到github了，以后也许用得着，地址: https://github.com/Taoqun/canvas_zhihu_login
+> - canvas 封装方法，增加点击，移动效果，配置颜色线条粗细功能
+> - 在线查看 http://jsrun.net/3PkKp/edit
+> - 传到github了，以后也许用得着，地址: https://github.com/Taoqun/canvas_zhihu_login
 
 先上效果：
 
 ![GIF.gif](http://upload-images.jianshu.io/upload_images/768057-b896a32b89842f33.gif?imageMogr2/auto-orient/strip)
-
+[图片不显示，点击这里](http://upload-images.jianshu.io/upload_images/768057-b896a32b89842f33.gif?imageMogr2/auto-orient/strip)
 点击效果：
 
 ![GIF2.gif](http://upload-images.jianshu.io/upload_images/768057-92c912b5093d6bdf.gif?imageMogr2/auto-orient/strip)
+[图片不显示，点击这里](http://upload-images.jianshu.io/upload_images/768057-92c912b5093d6bdf.gif?imageMogr2/auto-orient/strip)
+> - 默认生成随机大小的100个小点点
+> - 鼠标移动，修改鼠标小点点的xy轴坐标
+> - 鼠标点击，增加随机大小小点点
+> - 增加离屏canvas 优化性能
+> - 修复鼠标移出，去除鼠标效果的小点点
+> - 增加暂停开始功能
 
 index.html
 ```
@@ -20,6 +27,7 @@ index.js
 var root = document.querySelector("#root")
 var a = new CanvasAnimate(root,{length:80,clicked:true,moveon:true})
     a.Run()
+    a.pause() //  暂停
 ```
 
 CanvasAnimate.js
@@ -32,28 +40,40 @@ CanvasAnimate.js
 - `clicked` 鼠标点击是否增加连接小点点
 - `moveon` 鼠标移动是否增加连接效果
 
+-----
+
+> 方法
+- Run 开始运行
+- pause 暂停动画 或者 开始动画 切换
+
 ```
 function CanvasAnimate(Dom,options){
     options = options || {}
     this.Element = Dom
-    this.Dom = Dom.getContext("2d")
+    this.cvs = Dom.getContext("2d")
+    this.off_cvs = document.createElement("canvas")
+    this.off_cvs.width = Dom.width
+    this.off_cvs.height = Dom.height
+    this.Dom = this.off_cvs.getContext("2d")
     this.width = Dom.width
     this.height = Dom.height
     this.length = options.length || 100
     this.RoundColor = options.RoundColor || "#999" 
+    this.RoundDiameter = options.RoundDiameter || 2
     this.LineColor = options.LineColor || "#ccc"
     this.LineWeight = options.LineWeight || 1
     this.clicked = options.clicked || false
     this.moveon = options.moveon || false
     this.list = []
+    this.paused = true
 }
-
 CanvasAnimate.prototype.Run = function(){
     if( this.clicked ){
         this.Element.addEventListener( "click",this.Clicked.bind(this) )
     }
     if( this.moveon ){
         this.Element.addEventListener( "mousemove",this.moveXY.bind(this) )
+        this.Element.addEventListener( "mouseout",this.moveoutXY.bind(this) )
     }
     this.Draw( this.getLength() )
 }
@@ -99,22 +119,29 @@ CanvasAnimate.prototype.Draw = function(list){
     })
 
     this.drawLine(line_arr)
-
+    
     new_arr.map((item)=>{
         this.drawRound(item)
     })
 
     this.list = new_arr
 
+    this.cvs.drawImage(this.off_cvs,0,0,this.width,this.height)
+    
     setTimeout(()=>{
-        this.Dom.clearRect( 0,0,this.width,this.height )
-        this.Draw( new_arr )
+        if(this.paused){
+            this.next()
+        }
     },50)
+}
+CanvasAnimate.prototype.next = function(){
+    this.cvs.clearRect( 0,0,this.width,this.height )
+    this.Dom.clearRect( 0,0,this.width,this.height )
+    this.Draw( this.list )
 }
 CanvasAnimate.prototype.drawRound = function(obj){
     let {x,y,r} = obj
     this.Dom.beginPath()
-    let m = parseInt( Math.random() * 10)
     this.Dom.arc( x,y,r, 0, 2*Math.PI )
     this.Dom.fillStyle = this.RoundColor
     this.Dom.fill()
@@ -132,15 +159,15 @@ CanvasAnimate.prototype.drawLine = function(list){
     })
 }
 CanvasAnimate.prototype.ControlXY = function(obj){
-    if(obj.x >= this.width ){
+    if(obj.x >= (this.width - obj.r) ){
         obj.controlX = 'left'
-    }else if( obj.x <=0  ){
+    }else if( obj.x <= parseInt(obj.r/2)  ){
         obj.controlX = "right"
     }
 
-    if( obj.y >= this.height ){
+    if( obj.y >= (this.height - obj.r) ){
         obj.controlY = "bottom"
-    }else if( obj.y <= 0 ){
+    }else if( obj.y <= parseInt(obj.r/2) ){
         obj.controlY = "top"
     }
     return obj
@@ -187,4 +214,15 @@ CanvasAnimate.prototype.moveXY = function(event){
         this.list.unshift(obj)
     }
 }
+CanvasAnimate.prototype.moveoutXY = function(event){
+    this.list.shift()
+}
+CanvasAnimate.prototype.pause = function(){
+    this.paused = !this.paused
+    if( this.paused){
+        this.Draw(this.list)
+    }
+}
+
+
 ```

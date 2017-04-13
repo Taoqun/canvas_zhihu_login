@@ -16,6 +16,7 @@ function CanvasAnimate(Dom,options){
     this.clicked = options.clicked || false
     this.moveon = options.moveon || false
     this.list = []
+    this.paused = true
 }
 CanvasAnimate.prototype.Run = function(){
     if( this.clicked ){
@@ -79,10 +80,15 @@ CanvasAnimate.prototype.Draw = function(list){
     this.cvs.drawImage(this.off_cvs,0,0,this.width,this.height)
     
     setTimeout(()=>{
-        this.cvs.clearRect( 0,0,this.width,this.height )
-        this.Dom.clearRect( 0,0,this.width,this.height )
-        this.Draw( new_arr )
+        if(this.paused){
+            this.next()
+        }
     },50)
+}
+CanvasAnimate.prototype.next = function(){
+    this.cvs.clearRect( 0,0,this.width,this.height )
+    this.Dom.clearRect( 0,0,this.width,this.height )
+    this.Draw( this.list )
 }
 CanvasAnimate.prototype.drawRound = function(obj){
     let {x,y,r} = obj
@@ -104,15 +110,15 @@ CanvasAnimate.prototype.drawLine = function(list){
     })
 }
 CanvasAnimate.prototype.ControlXY = function(obj){
-    if(obj.x >= this.width ){
+    if(obj.x >= (this.width - obj.r) ){
         obj.controlX = 'left'
-    }else if( obj.x <=0  ){
+    }else if( obj.x <= parseInt(obj.r/2)  ){
         obj.controlX = "right"
     }
 
-    if( obj.y >= this.height ){
+    if( obj.y >= (this.height - obj.r) ){
         obj.controlY = "bottom"
-    }else if( obj.y <= 0 ){
+    }else if( obj.y <= parseInt(obj.r/2) ){
         obj.controlY = "top"
     }
     return obj
@@ -159,7 +165,13 @@ CanvasAnimate.prototype.moveXY = function(event){
         this.list.unshift(obj)
     }
 }
-CanvasAnimate.prototype.moveoutXY = function(){
+CanvasAnimate.prototype.moveoutXY = function(event){
     this.list.shift()
+}
+CanvasAnimate.prototype.pause = function(){
+    this.paused = !this.paused
+    if( this.paused){
+        this.Draw(this.list)
+    }
 }
 
