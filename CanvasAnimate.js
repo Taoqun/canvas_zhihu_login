@@ -34,7 +34,7 @@ CanvasAnimate.prototype.getLength=function(){
         let obj = {}
             obj.x = parseInt( Math.random() * this.width )
             obj.y = parseInt( Math.random() * this.height )
-            obj.r = parseInt( Math.random()*10 )
+            obj.r = parseInt( Math.random()*10 ) || 1
             obj.controlX = parseInt( Math.random()*10 ) > 5 ? "left":"right"
             obj.controlY = parseInt( Math.random()*10 ) > 5 ? "bottom":"top"
         arr.push(obj)
